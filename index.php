@@ -82,7 +82,9 @@ $about = $result->fetch_assoc();
             <!-- about used -->
           </p>
           <div class="btn_container">
-            <button class="btn btn-light animate__animated">Hire Me</button>
+            <a href="#contact_info">
+              <button class="btn btn-light animate__animated">Hire Me</button>
+            </a>
           </div>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -152,7 +154,7 @@ $about = $result->fetch_assoc();
                 $result = $con->query($sql);
                 while ($row = $result->fetch_assoc()) {
                 ?>
-                  <li class="list_group_item">
+                  <li class="list_group_item" title="As <?php echo $row["position"]; ?>">
                     <a class="text-white"> <?php echo $row["name"]; ?></a>
                   </li>
                 <?php
@@ -214,7 +216,7 @@ $about = $result->fetch_assoc();
                 while ($row = $result->fetch_assoc()) {
                 ?>
                   <div class="card border-0 padding-0" style="background-color:#232532;color:white;padding: 5px;">
-                    <img class="card-img-top" src="./Images/web site image/<?php echo $row['image']; ?>" alt="<?php echo $row['name']; ?>">
+                    <img class="card-img-top" src="./Images/projects/<?php echo $row['image']; ?>" alt="<?php echo $row['name']; ?>">
                     <h4 class="title" style="padding: 5px;"><?php echo $row['name'] ?></h4>
                     <p style="color: whitesmoke; padding:10px">
                       <?php echo $row['details'] ?>
