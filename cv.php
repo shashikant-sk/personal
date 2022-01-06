@@ -79,7 +79,7 @@ $pdf->MultiCell(60, 10, "About Me", 'B', 'L');
 $pdf->SetFont('Times', '', 12);
 $pdf->SetTextColor(0, 0, 0);
 $pdf->SetX(80);
-$pdf->MultiCell(120, 10, $about['second_message'], 0, 'J');
+$pdf->MultiCell(120, 5, $about['second_message'], 0, 'J');
 $pdf->SetX(80);
 
 $pdf->SetFont('Times', 'B', 20);
@@ -89,18 +89,12 @@ $pdf->MultiCell(80, 10, "Projects I Worked on", 'B', 'L');
 $sql = "SELECT * FROM projects";
 $result = $con->query($sql);
 $pdf->SetTextColor(0, 0, 0);
-$i = 60;
-$j = 65;
+$i = 0;
+$j = 0;
+$y[0] = $pdf->GetY();
+$y[65] = $pdf->GetY();
 while ($row = $result->fetch_assoc()) {
-    if ($i == 0) {
-        $i = 60;
-        $j = 65;
-    } else {
-        $i = 0;
-        $j = 0;
-        $y = $pdf->GetY();
-    }
-    $pdf->SetXY(80 + $j, $y);
+    $pdf->SetXY(80 + $j, $y[$j]);
     $pdf->SetFont('Times', 'B', 12);
     $pdf->MultiCell(55, 5, $row['name'], 0, 'L');
     $pdf->SetX(85 + $i);
@@ -108,11 +102,32 @@ while ($row = $result->fetch_assoc()) {
     $pdf->MultiCell(50, 5, $row['link'], 0, 'L');
     $pdf->SetX(85 + $i);
     $pdf->SetFont('Times', '', 10);
-    $pdf->MultiCell(50, 5, $row['details'], 0, 'L');
+    $pdf->MultiCell(50, 5, $row['details'], 0, 'J');
     $pdf->Ln();
+    if ($i == 0) {
+        $y[0] = $pdf->GetY();
+        $i = 60;
+        $j = 65;
+    } else {
+        $i = 0;
+        $j = 0;
+        $y[65] = $pdf->GetY();
+    }
+    if ($y[0] <= $y[65]) {
+        $i = 0;
+        $j = 0;
+    } else {
+        $i = 60;
+        $j = 65;
+    }
 }
 
-$y = $pdf->GetY();
+// $y = $pdf->GetY();
+if ($y[0] < $y[65]) {
+    $y = $y[65];
+} else {
+    $y = $y[0];
+}
 $pdf->SetXY(80, $y);
 
 $pdf->SetFont('Times', 'B', 20);
@@ -127,10 +142,10 @@ while ($row = $result->fetch_assoc()) {
     $pdf->MultiCell(55, 5, $row['name'], 0, 'L');
     $pdf->SetX(85);
     $pdf->SetFont('Times', 'I', 10);
-    $pdf->MultiCell(50, 5, $row['position'], 0, 'L');
+    $pdf->MultiCell(110, 5, $row['position'], 0, 'L');
     $pdf->SetX(85);
     $pdf->SetFont('Times', '', 10);
-    $pdf->MultiCell(50, 5, $row['message'], 0, 'L');
+    $pdf->MultiCell(110, 5, $row['message'], 0, 'J');
     $pdf->Ln();
 }
 
