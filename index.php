@@ -33,7 +33,7 @@ $about = $result->fetch_assoc();
 
 </head>
 
-<body>
+<body style="overflow-x: hidden;">
   <div class="container" id="particles-js">
     <div class="nav_section">
       <nav class="navbar navbar-expand-lg navbar-light">
@@ -56,7 +56,7 @@ $about = $result->fetch_assoc();
               <a class="nav-link" href="#skills">Skills</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#portfolio">Portfolio</a>
+              <a class="nav-link" href="#testimonial">Testimonial</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#blogs">Blog</a>
@@ -252,200 +252,169 @@ $about = $result->fetch_assoc();
 
               </div>
             </div>
-
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- --------------------------------------------- -->
-      <!-- blogs section -->
-      <div class="blogs_section" id="blogs">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-              <h1 id="heading" class="text-white text-center">Blogs<span style="color: #f87652;">.</span></h1>
-            </div>
-          </div>
-          <div class="row mt-5">
-            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-              <div class="card animate__animated border-0 ">
-                <div class="card-header border-0 p-0">
-                  <img src="./Images/web site image/1.jpg" width="100%" alt="blog_image_1">
-                </div>
-                <div class="card-body">
-                  <h3 class="title">Web Development </h3>
-                  <p class="date">Post On <span>05.12.2020</span> By <span>SK</span></p>
-                  <p class="txt">It is a Long established fact that a reader will be distracted by the readable content of a page when looking at it's layout</p>
-                  <a class="text-decoration-none read_more" href="#">Read more</a>
-                </div>
+  <!-- --------------------------------------------- -->
+  <!-- blogs section -->
+  <div style="background-color:#333647" id="testimonial">
+    <h1 class="text-white text-center my_portfolio_animation" style="margin: 100px 0 10px 0;"><span>Testimonials</span><span style="color: #f87652;">.</span></h1>
+
+    <?php include('./testimonial.php'); ?>
+  </div>
+
+
+  <!-- --------------------------------------------- -->
+  <!-- Contact Section -->
+  <div class="contact_section" id="contact_info">
+    <div class="container">
+      <div class="row m-0">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div>
+            <h3 class="heading" style="margin: 100px 0 10px 0;">Contact Me. </h3>
+            <hr>
+            <p class="txt">Feel Free to Contact With Me.</p>
+            <?php
+            if (isset($_POST["send"])) {
+              $name = $_POST["name"];
+              $email = $_POST["email"];
+              $subject = $_POST["subject"];
+              $message = $_POST["message"];
+              if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+                $ip = $_SERVER['HTTP_CLIENT_IP'];
+              } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+              } else {
+                $ip = $_SERVER['REMOTE_ADDR'];
+              }
+
+              date_default_timezone_set('Asia/Kathmandu');
+              $date = date('y-m-d');
+              $time = date('h:i:s');
+              $sql = "INSERT INTO messages (name, email, subject, message, ip, date, time) VALUES ('$name', '$email', '$subject', '$message', '$ip', '$date', '$time')";
+              if ($con->query($sql)) {
+                echo ("<h6 style='border:green 2px solid; border-radius:10px;color:white;background-color:#90ee90;padding:10px;'>Message sent Successfully</h6>");
+              } else {
+                echo ($con->error);
+              }
+            }
+            ?>
+            <form action="" method="POST">
+              <div class="form-group ">
+                <input class="form-control" name="name" placeholder="Your Name" type="text" required />
               </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-              <div class="card animate__animated border-0 ">
-                <div class="card-header border-0 p-0">
-                  <img src="./Images/web site image/2.jpg" width="100%" alt="blog_image_2">
-                </div>
-                <div class="card-body">
-                  <h3 class="title">Android Development </h3>
-                  <p class="date">Post On <span>05.12.2020</span> By <span>SK</span></p>
-                  <p class="txt">It is a Long established fact that a reader will be distracted by the readable content of a page when looking at it's layout</p>
-                  <a class="text-decoration-none read_more" href="#">Read more</a>
-                </div>
+              <div class="form-group ">
+                <input class="form-control" name="email" placeholder="Your E-mail" type="email" required />
               </div>
-            </div>
+              <div class="form-group ">
+                <input class="form-control" name="subject" placeholder="Subject" type="text" required />
+              </div>
+              <div class="form-group ">
+                <textarea class="form-control" name="message" placeholder="Type your Message...." name="" id="textarea" cols="30" rows="10"></textarea>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-light animate__animated" name="send" type="submit">Submit</button>
+              </div>
+            </form>
           </div>
         </div>
-      </div>
-
-
-      <!-- --------------------------------------------- -->
-      <!-- Contact Section -->
-      <div class="contact_section" id="contact_info">
-        <div class="container">
-          <div class="row m-0">
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-              <div>
-                <h3 class="heading">Contact Me. </h3>
-                <hr>
-                <p class="txt">Feel Free to Contact With Me.</p>
-                <?php
-                if (isset($_POST["send"])) {
-                  $name = $_POST["name"];
-                  $email = $_POST["email"];
-                  $subject = $_POST["subject"];
-                  $message = $_POST["message"];
-                  if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-                    $ip = $_SERVER['HTTP_CLIENT_IP'];
-                  } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-                  } else {
-                    $ip = $_SERVER['REMOTE_ADDR'];
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div>
+            <ul class="list-unstyled" style="margin: 100px 0 10px 0;">
+              <li>
+                <i class="fa fa-envelope-o"></i> <?php echo $about['email']; ?>
+              </li>
+              <li>
+                <i class="fa fa-phone"></i> <?php echo $about['phone']; ?>
+              </li>
+            </ul>
+          </div>
+          <div class="map_wrapper">
+            <div class="mapouter">
+              <div class="gmap_canvas"><iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d7065.712148626692!2d83.4637009!3d27.6908429!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2snp!4v1641300155270!5m2!1sen!2snp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                <style>
+                  .gmap_canvas {
+                    overflow: hidden;
+                    background: none !important;
+                    height: 327px;
+                    width: 525px;
                   }
-
-                  date_default_timezone_set('Asia/Kathmandu');
-                  $date = date('y-m-d');
-                  $time = date('h:i:s');
-                  $sql = "INSERT INTO messages (name, email, subject, message, ip, date, time) VALUES ('$name', '$email', '$subject', '$message', '$ip', '$date', '$time')";
-                  if ($con->query($sql)) {
-                    echo ("<h6 style='border:green 2px solid; border-radius:10px;color:white;background-color:#90ee90;padding:10px;'>Message sent Successfully</h6>");
-                  } else {
-                    echo ($con->error);
-                  }
-                }
-                ?>
-                <form action="" method="POST">
-                  <div class="form-group ">
-                    <input class="form-control" name="name" placeholder="Your Name" type="text" required />
-                  </div>
-                  <div class="form-group ">
-                    <input class="form-control" name="email" placeholder="Your E-mail" type="email" required />
-                  </div>
-                  <div class="form-group ">
-                    <input class="form-control" name="subject" placeholder="Subject" type="text" required />
-                  </div>
-                  <div class="form-group ">
-                    <textarea class="form-control" name="message" placeholder="Type your Message...." name="" id="textarea" cols="30" rows="10"></textarea>
-                  </div>
-                  <div class="form-group">
-                    <button class="btn btn-light animate__animated" name="send" type="submit">Submit</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-              <div>
-                <ul class="list-unstyled">
-                  <li>
-                    <i class="fa fa-envelope-o"></i> <?php echo $about['email']; ?>
-                  </li>
-                  <li>
-                    <i class="fa fa-phone"></i> <?php echo $about['phone']; ?>
-                  </li>
-                </ul>
-              </div>
-              <div class="map_wrapper">
-                <div class="mapouter">
-                  <div class="gmap_canvas"><iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d7065.712148626692!2d83.4637009!3d27.6908429!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2snp!4v1641300155270!5m2!1sen!2snp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                    <style>
-                      .gmap_canvas {
-                        overflow: hidden;
-                        background: none !important;
-                        height: 327px;
-                        width: 525px;
-                      }
-                    </style>
-                  </div>
-                </div>
+                </style>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- footer section -->
-      <div class="footer-area">
-        <div class="container">
-          <div class="row py-5">
-            <div class="logo-area col-lg-4 col-md-4 col-sm-12 col-12">
-              <a class="navbar-brand text-white" href="#">
-                <?php echo $about['name']; ?><span style="color: #f87652;">.</span>
-              </a>
-              <p>Let's grab a coffee and jump on conversation chat with me.</p>
-              <div class="links">
-                <a href="<?php echo $about["fb"]; ?>" target="_blank"><i class="fa fa-facebook-square animate__animated "></i></a>
-                <a href="<?php echo $about["ig"]; ?>" target="_blank"><i class="fa fa-instagram px-1 animate__animated"></i></a>
-                <a href="<?php echo $about["tw"]; ?>" target="_blank"><i class="fa fa-twitter-square animate__animated "></i></a>
-                <a href="<?php echo $about["git"]; ?>" target="_blank"><i class="fa fa-github-square"></i></a>
-              </div>
-            </div>
-            <div class=" col-lg-4 col-md-4 col-sm-12 col-12 column">
-              <h4 class="heading">Skills<span style="color: #f87652;">.</span></h4>
-              <ul class="list-group">
-                <?php
-                $sql = "SELECT * FROM skills";
-                $result = $con->query($sql);
-                while ($row = $result->fetch_assoc()) {
-                  if ($row['value'] >= 80) {
-                ?>
-                    <li class="list-group-item border-0 bg-transparent">
-                      <i class="fa fa-chevron-right"></i> <span><?php echo $row['name']; ?></span>
-                    </li>
-                <?php
-                  }
-                }
-                ?>
-              </ul>
-            </div>
-            <div class=" col-lg-4 col-md-4 col-sm-12 col-12 column">
-              <h4 class="heading">UseFull Link<span style="color: #f87652;">.</span></h4>
-              <ul class="list-group">
-
-                <?php
-                $sql = "SELECT * FROM projects ORDER BY id DESC";
-                $result = $con->query($sql);
-                while ($row = $result->fetch_assoc()) {
-                ?>
-                  <li class="list-group-item border-0 bg-transparent">
-                    <i class="fa fa-chevron-right"></i> <a href="<?php echo $row['link']; ?>" title="<?php echo $row['details'] ?>"><span style="color:white"><?php echo $row['name'] ?></span></a>
-                  </li>
-                <?php
-                }
-                ?>
-              </ul>
-            </div>
+  <!-- footer section -->
+  <div class="footer-area">
+    <div class="container">
+      <div class="row py-5">
+        <div class="logo-area col-lg-4 col-md-4 col-sm-12 col-12">
+          <a class="navbar-brand text-white" href="#">
+            <?php echo $about['name']; ?><span style="color: #f87652;">.</span>
+          </a>
+          <p>Let's grab a coffee and jump on conversation chat with me.</p>
+          <div class="links">
+            <a href="<?php echo $about["fb"]; ?>" target="_blank"><i class="fa fa-facebook-square animate__animated "></i></a>
+            <a href="<?php echo $about["ig"]; ?>" target="_blank"><i class="fa fa-instagram px-1 animate__animated"></i></a>
+            <a href="<?php echo $about["tw"]; ?>" target="_blank"><i class="fa fa-twitter-square animate__animated "></i></a>
+            <a href="<?php echo $about["git"]; ?>" target="_blank"><i class="fa fa-github-square"></i></a>
           </div>
         </div>
+        <div class=" col-lg-4 col-md-4 col-sm-12 col-12 column">
+          <h4 class="heading">Skills<span style="color: #f87652;">.</span></h4>
+          <ul class="list-group">
+            <?php
+            $sql = "SELECT * FROM skills";
+            $result = $con->query($sql);
+            while ($row = $result->fetch_assoc()) {
+              if ($row['value'] >= 80) {
+            ?>
+                <li class="list-group-item border-0 bg-transparent">
+                  <i class="fa fa-chevron-right"></i> <span><?php echo $row['name']; ?></span>
+                </li>
+            <?php
+              }
+            }
+            ?>
+          </ul>
+        </div>
+        <div class=" col-lg-4 col-md-4 col-sm-12 col-12 column">
+          <h4 class="heading">UseFull Link<span style="color: #f87652;">.</span></h4>
+          <ul class="list-group">
+
+            <?php
+            $sql = "SELECT * FROM projects ORDER BY id DESC";
+            $result = $con->query($sql);
+            while ($row = $result->fetch_assoc()) {
+            ?>
+              <li class="list-group-item border-0 bg-transparent">
+                <i class="fa fa-chevron-right"></i> <a href="<?php echo $row['link']; ?>" title="<?php echo $row['details'] ?>"><span style="color:white"><?php echo $row['name'] ?></span></a>
+              </li>
+            <?php
+            }
+            ?>
+          </ul>
+        </div>
       </div>
+    </div>
+  </div>
 
 
 
 
-      <footer class="text-white text-center">&copy;Sulabh Nepal</footer>
+  <footer class="text-white text-center">&copy;Sulabh Nepal</footer>
 
-      <!-- ____________________________________________________________________ -->
-      <!-- ----------------------------------------------------------------- -->
-      <script type="text/javascript" src="./Js/particles.js"></script>
-      <script type="text/javascript" src="./Js/app.js"></script>
+  <!-- ____________________________________________________________________ -->
+  <!-- ----------------------------------------------------------------- -->
+  <script type="text/javascript" src="./Js/particles.js"></script>
+  <script type="text/javascript" src="./Js/app.js"></script>
 </body>
 
 </html>
