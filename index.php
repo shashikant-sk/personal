@@ -78,7 +78,7 @@ $about = $result->fetch_assoc();
           <h1>I<span style="color: #f87652">'</span>m <?php echo $about["name"]; ?></h1> <!-- about used -->
           <h2><?php echo $about["tagline"]; ?></h2> <!-- about used -->
           <p>
-            <?php echo $about["first-message"]; ?>
+            <?php echo $about["first_message"]; ?>
             <!-- about used -->
           </p>
           <div class="btn_container">
@@ -127,10 +127,10 @@ $about = $result->fetch_assoc();
           <p id="txt">
             <?php echo $about["tagline"]; ?>
           </p>
-          <p id="txt" style="color:white !important"><?php echo $about["second-message"] ?></p>
+          <p id="txt" style="color:white !important"><?php echo $about["second_message"] ?></p>
 
           <br>
-          <button class="btn btn-light btn-sm animate__animated "> <a href="./cv.pdf" download> Download CV </a></button>
+          <button class="btn btn-light btn-sm animate__animated "> <a href="cv.php" target="_blank"> Download CV </a></button>
         </div>
       </div>
     </div>

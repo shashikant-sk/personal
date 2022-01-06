@@ -1,8 +1,9 @@
 <?php
-// if(!isset($_SESSION["access"])){
-//     header("location /login.php");
-//     die("Login first!!!");
-// }
+session_start();
+if (!isset($_SESSION["access"])) {
+    header("location: login.php");
+    die("Login first!!!");
+}
 if (isset($_FILES['profile'])) {
     move_uploaded_file(realpath($_FILES['profile']['tmp_name']), '../images/my image.jpg');
 }
@@ -13,6 +14,25 @@ include("../db.php");
 $sql = "SELECT * FROM about WHERE id = '1'";
 $result = $con->query($sql);
 $about = $result->fetch_assoc();
+if (isset($_POST["about"])) {
+    // $name = $_POST["name"];
+    $title = $_POST["title"];
+    $tagline = $_POST["tagline"];
+    $first_message = $_POST["first-message"];
+    $second_message = $_POST["second-message"];
+    $email = $_POST["email"];
+    $phone = $_POST["phone"];
+    $fb = $_POST["fb"];
+    $tw = $_POST["tw"];
+    $git = $_POST["git"];
+    $ig = $_POST["ig"];
+    $sql = "UPDATE about SET title='$title', tagline='$tagline', first_message='$first_message', second_message='$second_message', email='$email', phone='$phone', fb='$fb', tw='$tw', ig='$ig', git='$git'  where id=1";
+    $result1 = $con->query($sql);
+    if ($result1 == false) {
+        die("$con->error");
+    }
+}
+
 if (isset($_POST["skills"])) {
     $name = $_POST["name"];
     $value = $_POST["value"];
@@ -68,10 +88,36 @@ if (isset($_POST["AddProject"])) {
     $name = $_POST["name"];
     $link = $_POST["link"];
     $details = $_POST["details"];
-    $image = $_FILES["image"]['name'];
+    $image = time() . $_FILES["image"]['name'];
     // die($image);
     move_uploaded_file(realpath($_FILES['image']['tmp_name']), '../images/projects/' . $image);
     $sql = "INSERT INTO projects (name, link, details, image) VALUES ('$name', '$link', '$details', '$image')";
+    $result1 = $con->query($sql);
+    if ($result1 == false) {
+        die("$con->error");
+    }
+}
+if (isset($_POST["testimonial"])) {
+    $name = $_POST["name"];
+    $link = $_POST["link"];
+    $details = $_POST["details"];
+    // $image = $_FILES["image"]['name'];
+    // move_uploaded_file(realpath($_FILES['image']['tmp_name']), '../images/projects/' . $image);
+    $id = $_POST["id"];
+    $sql = "UPDATE testimonials SET name='$name', position='$link', message='$details' where id=$id";
+    $result1 = $con->query($sql);
+    if ($result1 == false) {
+        die("$con->error");
+    }
+}
+if (isset($_POST["AddTestimonial"])) {
+    $name = $_POST["name"];
+    $link = $_POST["link"];
+    $details = $_POST["details"];
+    $image = time() . $_FILES["image"]['name'];
+    // die($image);
+    move_uploaded_file(realpath($_FILES['image']['tmp_name']), '../images/testimonials/' . $image);
+    $sql = "INSERT INTO testimonials (name, position, message, image) VALUES ('$name', '$link', '$details', '$image')";
     $result1 = $con->query($sql);
     if ($result1 == false) {
         die("$con->error");
@@ -211,9 +257,9 @@ if (isset($_POST["AddProject"])) {
                     <label for="Tagline">Tagline: </label>
                     <input type="text" name="tagline" value="<?php echo $about['tagline']; ?>" class="form-control"> <br>
                     <label for="first-message">first-message: </label>
-                    <textarea type="text" name="first-message" style="height:100px" class="form-control"><?php echo $about['first-message']; ?> </textarea><br>
+                    <textarea type="text" name="first-message" style="height:100px" class="form-control"><?php echo $about['first_message']; ?> </textarea><br>
                     <label for="second-message">second-message: </label>
-                    <textarea type="text" name="second-message" style="height:300px" class="form-control"><?php echo $about['second-message']; ?></textarea> <br>
+                    <textarea type="text" name="second-message" style="height:300px" class="form-control"><?php echo $about['second_message']; ?></textarea> <br>
                     <div class="row">
                         <div class="col-sm">
                             <label for="email">email: </label>
@@ -232,6 +278,7 @@ if (isset($_POST["AddProject"])) {
                             <input type="text" name="git" value="<?php echo $about['git']; ?>" class="form-control"> <br>
                         </div>
                     </div>
+                    <button class="btn btn-primary" name="about">Save</button>
                 </form>
             </div>
             <div class="col-sm-4">
@@ -398,6 +445,71 @@ if (isset($_POST["AddProject"])) {
                         if (r == true) {
                             var xhttp = new XMLHttpRequest();
                             xhttp.open("GET", "deleProject.php?q=" + filename, true);
+                            xhttp.send();
+                            xhttp.onreadystatechange = function() {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    alert(this.responseText);
+                                    window.location.reload();
+                                }
+                            };
+                        }
+                    }
+                </script>
+            </div>
+            <div class="col-sm-6">
+                <h3 style="color: whitesmoke;">Testimonials</h3>
+                <form action="" method="POST" enctype="multipart/form-data">
+                    <label for="Name">Name: </label>
+                    <input type="text" name="name" class="form-control" required> <br>
+                    <label for="Link">Position: </label>
+                    <input type="text" name="link" class="form-control" required> <br>
+                    <label for="Details">Message: </label>
+                    <textarea type="text" name="details" style="height:100px" required class="form-control"></textarea><br>
+                    <label for="Image">Image: </label>
+                    <input type="file" name="image" style="color: whitesmoke;" required><br>
+                    <button class="btn btn-primary" name="AddTestimonial">Add Testimonial</button>
+                </form>
+                <table>
+                    <tr style="color:whitesmoke">
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Message</th>
+                        <th>Image</th>
+                        <th>Action</th>
+                    </tr>
+                    <?php
+                    $sql = "SELECT * FROM testimonials";
+                    $result = $con->query($sql);
+                    $i = 0;
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $id = $row["id"];
+                            $topic = $row["name"];
+                            $link = $row["position"];
+                            $image = $row["image"];
+                            $details = $row["message"];
+                            echo "<tr><form method='post' action=''>
+                                <td>
+                                <input type='text' name='name' value='$topic' style='width:100%'>
+                                <input type='text' name='id' value='$id' style='display:none'>
+                                </td>
+                                <td><input type='text' name='link' value='$link' style='width:100%'></td>
+                                <td><textarea type='text' name='details' style='width:100%;height:100px'>$details</textarea></td>
+                                <td><img src='../images/testimonials/$image' style='width:100%'></td>
+                                <td><button type='submit' style='padding:3px' name='testimonial' class='btn btn-primary'><i class='fas fa-save'></i>
+                                </button><button onclick='deleTestimonial($id)' class='btn btn-secondary' type='button' style='padding:3px;margin-left:5px'><i class='fas fa-minus-circle'></i>
+                                </button>'</td>
+                        </form></tr>";
+                        }
+                    }
+                    ?>
+                </table>
+                <script>
+                    function deleTestimonial(filename) {
+                        var r = confirm("Are you sure you want to delete this Project Record from site?")
+                        if (r == true) {
+                            var xhttp = new XMLHttpRequest();
+                            xhttp.open("GET", "deleTestimonial.php?q=" + filename, true);
                             xhttp.send();
                             xhttp.onreadystatechange = function() {
                                 if (this.readyState == 4 && this.status == 200) {

@@ -1,8 +1,9 @@
 <?php
-// if(!isset($_SESSION["access"])){
-//     header("location /login.php");
-//     die("Login first!!!");
-// }
+session_start();
+if (!isset($_SESSION["access"])) {
+    header("location: login.php");
+    die("Login first!!!");
+}
 $id = $_REQUEST["q"];
 include('../db.php');
 $sql = "DELETE FROM skills WHERE id = $id";
